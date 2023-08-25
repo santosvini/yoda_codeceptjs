@@ -22,5 +22,6 @@ jobs:
          cache: 'npm'
      - run: |
         npm install
+        npx selenium-standalone start
         npx codeceptjs run --override '{"helpers": {"WebDriver": {"show": true}}}' --steps
          
