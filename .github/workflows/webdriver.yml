@@ -13,22 +13,32 @@ jobs:
 
     steps:
     - run: docker run -d --net=host --shm-size=2g selenium/standalone-chrome:latest
-    # - uses: nanasess/setup-chromedriver@v2
-    #   with:
-    #     #Optional: do not specify to match Chrome's version
-    #     chromedriver-version: '116.0.5845.96'
+   
     - uses: browser-actions/setup-chrome@v1
     - run: chrome --version
+    
     - uses: actions/checkout@v3
+    
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
+
+    - uses: browser-actions/setup-chrome@v1
+      with:
+        chrome-version: beta
+      id: setup-chrome
+    - run:
+       chrome --version
+    
     - name: Install Dependencies
       run: npm install
+    
     - name: Start a server
       run: npx selenium-standalone start
+    
     - name: Run tests
       run: npx codeceptjs run --steps
-      env:
+      
+    env:
         CI: true
