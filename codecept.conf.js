@@ -20,11 +20,11 @@ exports.config = {
       windowSize: "maximize",
       waitForTimeout: 15000,
       smartWait: 15000,
-      desiredCapabilities: {
-        chromeOptions: {
-          args: ["--headless", "--disable-gpu", "--window-size=1366,768", "--no-sandbox"],
-        },
-      },
+      // desiredCapabilities: {
+      //   chromeOptions: {
+      //     args: ["--headless", "--disable-gpu", "--window-size=1366,768", "--no-sandbox"],
+      //   },
+      // },
     },
     Mochawesome: {
       uniqueScreenshotNames: true,
