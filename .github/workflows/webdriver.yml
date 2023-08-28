@@ -13,9 +13,6 @@ jobs:
 
     steps:
     - run: docker run -d --net=host --shm-size=2g selenium/standalone-chrome:latest
-   
-    - uses: browser-actions/setup-chrome@v1
-    - run: chrome --version
     
     - uses: actions/checkout@v3
     
@@ -34,8 +31,8 @@ jobs:
     - name: Install Dependencies
       run: npm install
     
-    - name: Start a server
-      run: npx selenium-standalone start
+    # - name: Start a server
+    #   run: npx selenium-standalone start
     
     - name: Run tests
       run: npx codeceptjs run --steps
