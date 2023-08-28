@@ -11,19 +11,18 @@ jobs:
         node-version: [16.x, 18.x]
 
     steps:
-    - run: docker run -d --net=host --shm-size=2g selenium/standalone-chrome:3.141.0
+    # - run: docker run -d --net=host --shm-size=2g selenium/standalone-chrome:3.141.0
+    - run: docker run -it -p 4444:4444 webdriverio/selenium-standalone
     - uses: actions/checkout@v3
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
     - name: npm install
-      run: |
-        npm install
-      env:
-        PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: true
-        PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
+      run: npm i @wdio/selenium-standalone-service --save-dev
     - name: start a server
       run: npx selenium-standalone start
     - name: run tests
       run: npx codeceptjs run --steps
+      env:
+        CI: true
