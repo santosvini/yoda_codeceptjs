@@ -1,3 +1,4 @@
+
 name: WebDriver Tests
 
 on: [push, pull_request]
@@ -8,20 +9,30 @@ jobs:
     runs-on: ubuntu-20.04
     strategy:
       matrix:
-        node-version: [16.x, 18.x]
+        node-version: [18.x]
 
     steps:
-    - run: docker run -d --net=host --shm-size=2g selenium/standalone-chrome:3.141.0
+    - run: docker run -d --net=host --shm-size=2g selenium/standalone-chrome:latest
+    # - run: docker run -d -p 4444:4444 -p 7900:7900 --shm-size="2g" selenium/standalone-chrome:latest
+    - uses: actions/checkout@v2
+    - uses: nanasess/setup-chromedriver@v2
+      with:
+        #Optional: do not specify to match Chrome's version
+        chromedriver-version: '116.0.5845.96'
+    - run: |
+        export DISPLAY=:99
+        chromedriver --url-base=/wd/hub &
+        sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1
     - uses: actions/checkout@v3
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
-    - name: npm install
-      run: npm i @wdio/selenium-standalone-service --save-dev
-    - name: start a server
+    - name: Install Dependencies
+      run: npm install
+    - name: Start a server
       run: npx selenium-standalone start
-    - name: run tests
+    - name: Run tests
       run: npx codeceptjs run --steps
       env:
         CI: true
