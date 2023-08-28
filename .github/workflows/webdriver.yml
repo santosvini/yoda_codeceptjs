@@ -1,12 +1,7 @@
 name: WebDriver Tests
 
-on:
-  push:
-    branches:
-      - 3.x
-  pull_request:
-    branches:
-      - '**'
+on: [push, pull_request]
+
 jobs:
   build:
 
@@ -22,16 +17,13 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
-    - uses: shivammathur/setup-php@v2
-      with:
-        php-version: 8.0
     - name: npm install
       run: |
-        npm install --legacy-peer-deps
+        npm install
       env:
         PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: true
         PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
     - name: start a server
-      run: "npx selenium-standalone start"
+      run: npx selenium-standalone start
     - name: run tests
-      run: "npx codeceptjs run --steps"
+      run: npx codeceptjs run --steps
